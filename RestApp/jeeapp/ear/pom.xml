@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>restJpa</groupId>
+    <artifactId>jeeapp</artifactId>
+    <version>1</version>
+  </parent>
+
+  <artifactId>ear</artifactId>
+  <packaging>ear</packaging>
+  <name>ear assembly</name>
+
+  <dependencies>
+
+
+    <dependency>
+      <groupId>restJpa</groupId>
+      <artifactId>ejbs</artifactId>
+      <type>ejb</type>
+    </dependency>
+
+   <dependency>
+      <groupId>restJpa</groupId>
+      <artifactId>jpa</artifactId>
+      <type>jar</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>restJpa</groupId>
+      <artifactId>rest</artifactId>
+      <version>1</version>
+      <type>war</type>
+    </dependency>
+  
+  </dependencies>
+</project>
