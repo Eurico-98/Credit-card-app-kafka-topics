@@ -1,0 +1,83 @@
+o consumer:
+
+java -jar target/KafkaStreams.jar (nome do topico)
+
+producer:
+
+java -cp target/KafkaStreams.jar streams.Kafka_Stream (nome_da_package.nome_da_classe_sem_extensão) (nome do topico)
+
+middle  man (corre-se como um produtor):
+
+java -cp target/KafkaStreams.jar book.Clients (nome_da_package.nome_da_classe_sem_extensão) (input topic) (output topic)
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+comandos para por no vsc visivel na estrutura do projeto uma pasta que esteja no container criando um link
+(para poder ter acesso direto a partir do VScode aos ficheiros dentro do container do docker)
+
+ln -s (localizacao origina da pasta) (localizacao onde quero ter a pasta visivel)
+
+--------------------------------------------------------------------------------- LIMPAR TOPICOS
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic client
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic manager
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic results
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Payments_topic
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic DBcurrenciesInfo
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic DBclientIDsInfo
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Credits_Topic
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic __consumer_offsets
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-windowStoreCredits-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-windowStorePayments-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-AGGREGATE-STATE-STORE-0000000057-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-AGGREGATE-STATE-STORE-0000000063-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-AGGREGATE-STATE-STORE-0000000069-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-AGGREGATE-STATE-STORE-0000000069-repartition
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-REDUCE-STATE-STORE-0000000003-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-REDUCE-STATE-STORE-0000000009-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-REDUCE-STATE-STORE-0000000022-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-REDUCE-STATE-STORE-0000000022-repartition
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-REDUCE-STATE-STORE-0000000032-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-REDUCE-STATE-STORE-0000000032-repartition
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-REDUCE-STATE-STORE-0000000078-changelog
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic Trabalho3_v3-KSTREAM-REDUCE-STATE-STORE-0000000078-repartition
+./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic Payments_topic
+./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic Credits_Topic
+./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic DBclientIDsInfo
+./kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+------------------------------ LIMPAR A BASE DE DADOS
+delete from client where id =1;
+delete from client where id =2;
+delete from client where id =3;
+delete from results where id = '-1';
+delete from manager where id =1;
+delete from manager where id =2;
+select * from results;
+select * from client;
+select * from manager;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Para ligar os serviços
+
+cd ../opt/kafka_2.13-2.8.1
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ZOOKEEPER
+bin/zookeeper-server-start.sh config/zookeeper.properties
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+SERVIDOR
+bin/kafka-server-start.sh config/server.properties
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONECTOR E SINK
+bin/connect-standalone.sh config/connect-standalone.properties config/connect-jdbc-source-trabalho3-currencies.properties config/connect-jdbc-source-trabalho3-clientids.properties config/connect-jdbc-sink-trabalho3.properties
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+->  Desligar pela ordem inversa à qual liguei
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONSUMER
+bin/kafka-console-consumer.sh --topic results --from-beginning --bootstrap-server localhost:9092
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
