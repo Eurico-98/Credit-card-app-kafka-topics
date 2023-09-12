@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+  http://maven.apache.org/xsd/maven-4.0.0.xsd" >
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>book</groupId>
+  <artifactId>KafkaStreams</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>KafkaStreams</name>
+  <description>A simple KafkaStreams.</description>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>16</maven.compiler.release>
+    <wildfly-plugin-version>2.1.0.Beta1</wildfly-plugin-version>
+  </properties>  
+  <dependencies>
+
+  
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+      <version>2.8.1</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.12.3</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-streams</artifactId>
+      <version>2.8.1</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.9</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-api</artifactId>
+      <version>8.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--<dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.32</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.7.32</version>
+    </dependency>-->
+
+
+    <!--<dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.0.0.Alpha8</version>
+    </dependency>
+        
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>7.0.1.Final</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+      <version>1.0.2.Final</version>
+    </dependency>-->
+
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.24</version>
+    </dependency>
+
+  </dependencies>
+  <build>
+    <finalName>${project.artifactId}</finalName>
+   
+      <plugins>
+      
+        <plugin>
+            <groupId>org.wildfly.plugins</groupId>
+            <artifactId>wildfly-maven-plugin</artifactId>
+            <version>${wildfly-plugin-version}</version>
+            <configuration>
+                <skip>false</skip>
+                <hostname>wildfly</hostname>
+                <port>9990</port>
+                <filename>${project.artifactId}.ear</filename>
+                <username>admin</username>
+                <password>admin#7rules</password>
+            </configuration>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+
+
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+
+
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+
+
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+        </plugin>
+
+
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+
+          <executions>
+            <execution>
+
+              <id>copy-dependencies</id>
+              <phase>prepare-package</phase>
+              <goals>
+                <goal>copy-dependencies</goal>
+              </goals>
+
+              <configuration>
+                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              </configuration>
+
+            </execution>
+          </executions>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+
+          <configuration>
+
+            <archive>
+            
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+                <mainClass>book.Clients</mainClass>
+              </manifest>
+
+            </archive>
+
+          </configuration>
+        </plugin>
+
+
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+
+
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+
+
+      </plugins>
+  </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
