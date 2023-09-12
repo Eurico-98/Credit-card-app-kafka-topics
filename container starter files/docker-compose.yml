@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  database:
+    image: postgres:13
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: My01pass # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: school # The PostgreSQL default database (automatically created at first launch)
+  wildfly:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    links: 
+      - database
+    ports:
+      - 8080:8080
+      - 8443:8443
+      - 9990:9990
+      - 9993:9993
+  command-line:
+    build:
+     context: .
+     dockerfile: Dockerfile.2
+    command: tail -f /dev/null
+    links: 
+      - database
+      - wildfly
+    ports:
+      - 2181:2181
+      - 9092:9092
+    volumes:
+      - ..:/workspace
+    

@@ -1,0 +1,29 @@
+# Batch script to enable elytron for the quickstart application in the JBoss EAP server and a few more things
+# Adapted from https://github.com/wildfly/quickstart/tree/11.x/ejb-security
+
+# Start batching commands
+batch
+
+# Deploy the driver
+deploy --force --url=https://jdbc.postgresql.org/download/postgresql-42.2.24.jar
+
+# Deploy the data source
+data-source add --name=PostgresDS --driver-name=postgresql-42.2.24.jar  --driver-class=org.postgresql.Driver --jndi-name=java:/PostgresDS --connection-url=jdbc:postgresql://database:5432/school  --user-name=postgres --password=My01pass
+
+# Add security domain mapping in the EJB3 subsystem to enable elytron for the quickstart EJBs
+/subsystem=ejb3/application-security-domain=other:add(security-domain=ApplicationDomain)
+
+# Update the http-remoting-connector to use the application-sasl-authentication factory
+/subsystem=remoting/http-connector=http-remoting-connector:write-attribute(name=sasl-authentication-factory,value=application-sasl-authentication)
+
+# JMS
+jms-queue add --queue-address=playQueue --entries=java:jboss/exported/jms/queue/PlayQueue
+jms-topic add --topic-address=playTopic --entries=java:jboss/exported/jms/topic/playTopic
+/subsystem=messaging-activemq/server=default/security-setting=#/role=guest:remove()
+/subsystem=messaging-activemq/server=default/security-setting=#/role=guest:add(consume=true,create-durable-queue=true,delete-durable-queue=true,create-non-durable-queue=true,delete-non-durable-queue=true,send=true)
+
+# Run the batch commands
+run-batch
+
+# Reload the server configuration
+reload
